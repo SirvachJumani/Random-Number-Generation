@@ -1,0 +1,217 @@
+% Gemini theme
+% https://github.com/anishathalye/gemini
+
+\documentclass[final]{beamer}
+
+% ====================
+% Packages
+% ====================
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[size=custom,width=120,height=73,scale=1.0]{beamerposter}
+\usetheme{gemini}
+%\usecolortheme{gemini}
+\usecolortheme{labsix}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\fontsize{5.0pt}{\baselineskip}\selectfont
+\usepackage[export]{adjustbox} 
+\usepackage{caption}
+% ====================
+% Lengths
+% ====================
+
+% If you have N columns, choose \sepwidth and \colwidth such that
+% (N+1)*\sepwidth + N*\colwidth = \paperwidth
+\newlength{\sepwidth}
+\newlength{\colwidth}
+\setlength{\sepwidth}{0.025\paperwidth}
+\setlength{\colwidth}{0.3\paperwidth}
+\newcommand{\separatorcolumn}{\begin{column}{\sepwidth}\end{column}}
+% ====================
+% Title
+% ====================
+%\tsdlogofile{trier1}
+
+\centering
+
+\title{Random Number Generation}
+
+\author{Carmina Tió \and Sirvach Jumani  \and Soheil Shams \and Zhuocheng Xie } 
+
+% ====================
+% Body
+% ====================
+
+
+\begin{document}
+\addtobeamertemplate{headline}{} 
+{\begin{tikzpicture}[remember picture, overlay]
+     % \node [anchor=north west, inner sep=0.3cm]  at (current page.north west)
+     %{\includegraphics[height=6cm]{wiso}};
+     \node [anchor=north east, inner sep=0.3cm]  at (current page.north east)
+     {\includegraphics[height=6cm]{uni trier}};
+     
+  \end{tikzpicture}}
+\large
+\begin{frame}[t]
+\begin{columns}[t]
+\separatorcolumn
+
+\begin{column}{\colwidth}
+
+  \begin{block}{Introduction and Motivation}
+
+    Since natural random numbers are not reproducible, we often work with pseudorandom numbers that are generated using mathematical procedures.
+    
+   \textbf{Applications of Random Number Generation}
+   \vspace{-1cm}
+   \begin{itemize}
+   \item Randomly assign samples into different groups.
+   \item Simulate a process, approximate or estimate a value.
+   \item Encrypted information for safety communication.
+   \end{itemize}
+  
+  We used linear congruential generator to check the patterns while using good and bad parameters. 
+  \begin{figure}
+   \begin{center}
+   	\includegraphics[width=0.32\linewidth]{n100}
+   	\includegraphics[width=0.32\linewidth]{n1000}   
+   	\includegraphics[width=0.32\linewidth]{n10000} 
+   	\vspace{-1cm}
+   	\captionsetup{font={normalsize}}
+   	\caption{Good Generator}
+   	\includegraphics[width=0.32\linewidth]{n100-1}
+   	\includegraphics[width=0.32\linewidth]{n1000-1}   
+   	\includegraphics[width=0.32\linewidth]{n10000-1} 
+   	\vspace{-1cm} 
+   	\captionsetup{font={normalsize}}
+   	\caption{Bad Generator}
+   \end{center}  
+  \end{figure}
+  \end{block}
+  
+  \begin{block}{Essential Properties of a Random Number Generator}
+  Random numbers must be tested because the random numbers we generate are pseudo random numbers and not real, and a sequence of random numbers must be uniformly distributed and independent.
+    \begin{itemize}
+      \item \textbf{Uniformity:} Random number generator should be uniformly distributed and unbiased.
+      \item \textbf{Independence:} The current value of a random variable has no relation with the previous values.
+      \item \textbf{Reproducibility:} The same sequence should be produced with the same initial values (or seeds).
+      \item \textbf{Randomness:} Should produce independent uniformly distributed random variables that pass all statistical tests for randomness.
+      \item \textbf{Long Period:} A pseudo-random number sequence uses finite numbers, so the sequence must repeat itself with a finite period. This should be longer than the amount of random numbers needed for the simulation.
+      
+    \end{itemize}
+
+  \end{block}
+
+\end{column}
+
+\separatorcolumn
+
+\begin{column}{\colwidth}
+
+  \begin{alertblock}{Methods}
+  \begin{itemize}
+
+  \item  \textbf{Fibonacci Generator:}  The Fibonacci generator is based on the Fibonacci sequence. We get a generalization by the modulo factor m and by lagging the sequence by j and k.
+     \[x_n=x_{n-j}*x_{n-k}\; mod \; m\]
+  \item  \textbf{Inversive Congruential Generator:} The non-linearity of the inverse congruential method is accomplished by using the multiplicative inversion operation with respect to a defined modulus. 
+  %\begin{large}
+  \[x_{{n}} = (ax_{n-1}^{{-1}}+c)\;mod \;m\]
+  %\end{Large}
+  \item  \textbf{Multiply with Carry Number Generator:} The key benefit of the MWC method is that it expresses simple computer integer arithmetic and leads to very fast generation of random number sequences with enormous periods.
+  %\qquad $x_n = (ax_{n-1}+c_{n-1}\,mod\,b,\, c_n =\frac{ax_{n-1} + c_{n-1}}{b}$      
+  \[x_n = (ax_{n-1}+c_{n-1})\;mod\;b,\, c_n =\frac{ax_{n-1} + c_{n-1}}{b}\]
+  \item \textbf{Combined Generator (Using K Multiplicative Congruential Generator): }  
+The combination of more than one generator will improve both the period and the apparent randomness of the random number generators.
+%\quad  $x_{n} = (a*x_{n-1})\;mod\;m$ 
+\[x_{n} = (a*x_{n-1})\;mod\;m_1\]
+\[y_{n} = (b*y_{n-1})\;mod\;m_2\]
+\[z_{n} = (x_n-y_n)\;mod\;m_1\]
+\[u_{n} = 4.656613*z_{n}*10^{-10}\]
+  
+\end{itemize}
+
+  \end{alertblock}
+
+  \begin{block}{Results (Scatter Plots)}
+  %\begin{figure}
+    \begin{center}
+   \vspace{-1cm}
+    \includegraphics[width=0.8\linewidth]{together}
+    %\caption{Scatter Plots}
+   \end{center} 
+  %\end{figure}
+
+
+  \end{block}
+
+\end{column}
+
+\separatorcolumn
+
+\begin{column}{\colwidth}
+   
+  \begin{block}{Results (Histograms and Tests)}
+ %\begin{figure}
+  \centering
+  \vspace{-0.1cm}
+    \includegraphics[width=0.9\linewidth]{togetherh}
+   % \caption{Histograms}
+  %\end{figure}
+  	
+    \begin{center}
+    %\vspace{-2cm}
+    \begingroup
+    \setlength{\tabcolsep}{23pt}
+    \renewcommand{\arraystretch}{1.1}
+    \begin{table}
+    
+      \begin{tabular}{l r c r r}
+        \toprule
+        \centering
+        \textbf{Name} & \textbf{Serial Correlation} & \textbf{KS-Test} & \textbf{Period} & \textbf{Time}\\
+        \midrule 
+        \centering     
+        Fibonacci & $-0.00020801$ & $H_0:X$\sim$Unif;p>0.5$ & $2^{32}$ & $5.00$\\
+        Inversive & $0.000349379$ & $H_0:X$\sim$Unif;p>0.5$ & $2^{31}-1$ & $4.94$\\
+        Multiply &  $0.002646124$ & $H_0:X$\sim$Unif;p>0.5$ & $2^{32}$ & $5.89$\\
+        Combined &  $0.000093411$ & $H_0:X$\sim$Unif;p>0.5$ & $10^{18}$ & $12.97$\\
+        \bottomrule
+      \end{tabular} 
+      \captionsetup{font={normalsize}}
+     % \caption{Numeric Result}  
+       \end{table}
+    \endgroup
+
+    \end{center}
+
+
+  \end{block}
+\begin{block}{Conclusion}
+Overall we can say in this study that all RNGs are performing well in terms of uniformity, randomness and independence. The Combined Generator has the longest period of RNGs and takes the longest time to generate its sequences. We could also observe that the seed of the parameters plays an important role in the performance of the RNG.
+\end{block}
+
+  \begin{block}{References}
+    [1] Zhou Bo, and Qiankun Song. \textsl{Period Distribution of Inversive Pseudorandom Number Generators Over Finite Fields}. arXiv preprint arXiv:1209.1295, 2012.
+    
+    [2] Marsaglia, George. \textsl{On the randomness of pi and other decimal expansions}. InterStat 5, 2005.
+    
+    [3] Niederreiter, Harald. \textsl{Random Number Generation and Quasi-Monte Carlo Methods}. Vol. 63, Society for Industrial and Applied Mathematics, 1992.
+    
+    [4] Gentle, James E. \textsl{Random Number Generation and Monte Carlo Methods}. Springer, 2003.
+    
+    [5] Dagpunar, John. \textsl{Principles of Random Variate Generation}. Clarendon Press, 1988.
+    \nocite{*}
+    \footnotesize{\bibliographystyle{plain}\bibliography{poster}}
+
+  \end{block}
+
+\end{column}
+\separatorcolumn
+\end{columns}
+\end{frame}
+\end{document}
